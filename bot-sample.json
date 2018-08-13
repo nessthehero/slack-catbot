@@ -1,0 +1,30 @@
+{
+	"env": {
+		"token": "{SLACK BOT TOKEN}",
+		"name": "{SLACK BOT NAME}"
+	},
+	"boss": [
+		"{USER ID NOT NAME}"
+	],
+	"config": {
+		"generator": {
+		},
+		"pokemon": {
+			"regex": "^pokemon.+"
+		},
+		"reset": {
+			"regex": "!die|!goaway|!reset"
+		},
+		"speak": {
+			"regex": "catbot"
+		},
+		"bukkit": {
+			"regex": "^bukkit.+|^!(.+).gif$|^!(.+).jpeg$|^!(.+).jpg$|^!(.+).png$"
+		},
+		"github": {
+			"username": "{GITHUB USERNAME}",
+			"password": "{GITHUB PASSWORD}",
+			"regex": "^gh .+"
+		}
+	}
+}
