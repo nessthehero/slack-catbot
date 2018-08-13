@@ -1,0 +1,18 @@
+{
+  "name": "slack-catbot",
+  "version": "1.0.0",
+  "description": "Slack powered Catbot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@slack/client": "^4.3.1",
+    "slackbots": "^1.1.0",
+    "@octokit/rest": "^14.0.0",
+    "jsmegahal": "^1.2.4",
+    "lodash": "^4.17.4"
+  }
+}
