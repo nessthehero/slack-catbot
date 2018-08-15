@@ -7,6 +7,7 @@ const megahal = require('jsmegahal');
 const bukkit = require('./modules/bukkit.js');
 const pokemon = require('./modules/pokemon.js');
 const github = require('./modules/github.js');
+const zomato = require('./modules/zomato.js');
 
 let cooldownFlag = false;
 let requestInMotionFlag = false;
@@ -109,20 +110,25 @@ bot.on('message', function (data) {
 
 				} else {
 
-					let messageSansName = message.replace(/catbot/i, '');
+					let room = channelOrGroup(channel);
 
-					messageSansName = fixMessage(messageSansName);
+					if (room === 'room') { // Only log public rooms
 
-					writeToLog(__dirname + '/markov.txt', messageSansName);
+						let messageSansName = message.replace(/catbot/i, '');
+
+						messageSansName = fixMessage(messageSansName);
+
+						writeToLog(__dirname + '/markov.txt', messageSansName);
+
+						hal.addMass(messageSansName);
+
+					}
 
 					setTimeout(function () {
 
 						say([hal.getReplyFromSentence(messageSansName)], data.channel);
-						// say([hal.getReply(messageSansName)], data.channel);
 
 					}.bind(this), 1500);
-
-					hal.addMass(messageSansName);
 
 				}
 
@@ -155,6 +161,32 @@ bot.on('message', function (data) {
 			}
 
 		}
+
+		// if (meetsCriteria('zomato', data)) {
+		//
+		// 	if (canDo()) {
+		//
+		// 		warmUp();
+		//
+		// 		// let channel = data.channel;
+		//
+		// 		let msg = message.split(' ');
+		// 		let clean = msg.shift();
+		// 		msg = msg.join(' ');
+		//
+		// 		zomato.retrieve(msg).then(function (data) {
+		// 			console.log('done');
+		// 			// say(data, channel);
+		// 			cooldown();
+		// 		}, function (error) {
+		// 			console.log('error');
+		// 			// say(error, channel);
+		// 			cooldown();
+		// 		});
+		//
+		// 	}
+		//
+		// }
 
 		if (meetsCriteria('bukkit', data)) {
 
@@ -204,13 +236,21 @@ bot.on('message', function (data) {
 
 			if (msg[0] !== 'pokemon') {
 
-				let messageSansName = message.replace(/catbot/i, '');
+				let channel = data.channel;
 
-				messageSansName = fixMessage(messageSansName);
+				let room = channelOrGroup(channel);
 
-				writeToLog(__dirname + '/markov.txt', messageSansName);
+				if (room === 'room') { // Only log public rooms
 
-				hal.addMass(messageSansName);
+					let messageSansName = message.replace(/catbot/i, '');
+
+					messageSansName = fixMessage(messageSansName);
+
+					writeToLog(__dirname + '/markov.txt', messageSansName);
+
+					hal.addMass(messageSansName);
+
+				}
 
 			}
 
@@ -318,7 +358,7 @@ function say(response, channel) {
 	}
 
 	if (room === 'user') {
-		sayGroup(response, __users[channel]);
+		sayUser(response, __users[channel]);
 	}
 
 }

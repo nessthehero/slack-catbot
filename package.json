@@ -9,10 +9,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@slack/client": "^4.3.1",
-    "slackbots": "^1.1.0",
     "@octokit/rest": "^14.0.0",
+    "@slack/client": "^4.3.1",
     "jsmegahal": "^1.2.4",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "slackbots": "^1.1.0",
+    "zomato": "^1.1.0"
   }
 }
