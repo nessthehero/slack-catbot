@@ -115,11 +115,11 @@ bot.on('message', function (data) {
 
 					let room = channelOrGroup(channel);
 
+					let messageSansName = message.replace(/catbot/i, '');
+
+					messageSansName = fixMessage(messageSansName);
+
 					if (room === 'room') { // Only log public rooms
-
-						let messageSansName = message.replace(/catbot/i, '');
-
-						messageSansName = fixMessage(messageSansName);
 
 						writeToLog(__dirname + '/markov.txt', messageSansName);
 
