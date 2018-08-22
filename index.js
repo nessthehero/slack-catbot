@@ -8,6 +8,7 @@ const bukkit = require('./modules/bukkit.js');
 const pokemon = require('./modules/pokemon.js');
 const github = require('./modules/github.js');
 const zomato = require('./modules/zomato.js');
+const doggos = require('./modules/doggo.js');
 
 let cooldownFlag = false;
 let requestInMotionFlag = false;
@@ -154,6 +155,29 @@ bot.on('message', function (data) {
 					say(data, channel);
 					cooldown();
 				}, function (error) {
+					say(error, channel);
+					cooldown();
+				});
+
+			}
+
+		}
+
+		if (meetsCriteria('doggo', data)) {
+
+			if (canDo()) {
+
+				warmUp();
+
+				let channel = data.channel;
+
+				doggos.get().then(function (res) {
+					// console.log('done');
+					// console.log(res);
+					say(res, channel);
+					cooldown();
+				}, function (error) {
+					// console.log('error');
 					say(error, channel);
 					cooldown();
 				});

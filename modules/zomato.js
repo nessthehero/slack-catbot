@@ -548,7 +548,22 @@ module.exports = {
 
 		return new Promise(function (resolve, reject) {
 
-			this._apiGetLunchSpots(config.config.zomato.lat, config.config.zomato.lon).then(function (lunch) {
+			// this._apiGetLunchSpotsByGeocode(config.config.zomato.lat, config.config.zomato.lon).then(function (lunch) {
+			//
+			// 	console.log('zomato lunch results!');
+			// 	console.log(lunch);
+			//
+			// 	return resolve(lunch);
+			//
+			// }.bind(this), function (error) {
+			//
+			// 	response.push(error);
+			//
+			// 	return reject(response);
+			//
+			// }.bind(this));
+
+			this._apiGetLunchSpotsByEntity().then(function (lunch) {
 
 				console.log('zomato lunch results!');
 				console.log(lunch);
@@ -567,7 +582,7 @@ module.exports = {
 
 	},
 
-	_apiGetLunchSpots: function (lat, lon) {
+	_apiGetLunchSpotsByGeocode: function (lat, lon) {
 
 		let client = zomato.createClient({
 			userKey: config.config.zomato.key
@@ -578,8 +593,49 @@ module.exports = {
 		return new Promise(function (resolve, reject) {
 
 			client.getGeocode({
+				city_id: 1081,
 				lat: lat,
-				lon: lon
+				lon: lon,
+				count: 15
+			}, function (err, result) {
+
+				console.log(result, err);
+
+				if (!err) {
+
+					// console.log('Zomato request successful!');
+					// console.log(result);
+
+					resolve(result);
+
+				} else {
+
+					// console.log('Zomato request error');
+					// console.log(err);
+
+					reject(err);
+
+				}
+
+			});
+
+		});
+
+	},
+
+	_apiGetLunchSpotsByEntity: function () {
+
+		let client = zomato.createClient({
+			userKey: config.config.zomato.key
+		});
+
+		// console.log('2', client);
+
+		return new Promise(function (resolve, reject) {
+
+			client.getLocationDetails({
+				entity_id: '119179',
+				entity_type: 'subzone'
 			}, function (err, result) {
 
 				console.log(result, err);
