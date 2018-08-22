@@ -100,6 +100,8 @@ bot.on('message', function (data) {
 
 				let msg = message.split(' ');
 
+				let channel = data.channel;
+
 				if (msg[0] === 'catbot' && (msg[1] === 'help' || msg[1] === '?')) {
 
 					let response = [
@@ -107,7 +109,7 @@ bot.on('message', function (data) {
 						'Other commands: `pokemon`, `gh`, `bukkit`'
 					];
 
-					say(response, data.channel);
+					say(response, channel);
 
 				} else {
 
