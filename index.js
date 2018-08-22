@@ -7,7 +7,7 @@ const megahal = require('jsmegahal');
 const bukkit = require('./modules/bukkit.js');
 const pokemon = require('./modules/pokemon.js');
 const github = require('./modules/github.js');
-const zomato = require('./modules/zomato.js');
+// const zomato = require('./modules/zomato.js');
 const doggos = require('./modules/doggo.js');
 
 let cooldownFlag = false;
