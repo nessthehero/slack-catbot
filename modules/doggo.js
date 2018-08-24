@@ -27,7 +27,7 @@ module.exports = {
 
 								if (!puppers.data.children[i].data.is_video) {
 
-									if (typeof puppers.data.children[i].data.preview.images[0].variants.gif.source.url !== 'undefined') {
+									if (typeof puppers.data.children[i].data.preview.images[0].variants.gif !== 'undefined') {
 										p.push(puppers.data.children[i].data.preview.images[0].variants.gif.source.url);
 									} else {
 										if (typeof puppers.data.children[i].data.preview.images[0].source.url !== 'undefined') {
