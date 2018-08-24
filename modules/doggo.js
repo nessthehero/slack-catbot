@@ -27,13 +27,13 @@ module.exports = {
 
 								if (!puppers.data.children[i].data.is_video) {
 
-									if (typeof puppers.data.children[i].data.preview.images[0].source.url !== 'undefined') {
-										p.push(puppers.data.children[i].data.preview.images[0].source.url);
+									if (typeof puppers.data.children[i].data.preview.images[0].variants.gif.source.url !== 'undefined') {
+										p.push(puppers.data.children[i].data.preview.images[0].variants.gif.source.url);
+									} else {
+										if (typeof puppers.data.children[i].data.preview.images[0].source.url !== 'undefined') {
+											p.push(puppers.data.children[i].data.preview.images[0].source.url);
+										}
 									}
-
-									// if (typeof puppers.data.children[i].data.url !== 'undefined') {
-									// 	p.push(puppers.data.children[i].data.url);
-									// }
 
 								}
 
@@ -44,14 +44,12 @@ module.exports = {
 				}
 
 				if (p.length > 0) {
-					let rando = p[Math.floor(Math.random()*p.length)];
-
-					// console.log('rando is ', rando);
+					let rando = p[Math.floor(Math.random() * p.length)];
 
 					res.push(rando);
 
 				} else {
-					res.push("I couldn't find any puppers =(");
+					res.push('I couldn\'t find any puppers =(');
 				}
 
 				if (error) {

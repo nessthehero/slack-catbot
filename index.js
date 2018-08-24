@@ -106,7 +106,7 @@ bot.on('message', function (data) {
 
 					let response = [
 						'I am catbot! You can talk to me and I might reply. I like hearing my name.',
-						'Other commands: `pokemon`, `gh`, `bukkit`'
+						'Other commands: `pokemon`, `gh`, `bukkit`, `!doggo`'
 					];
 
 					say(response, channel);
