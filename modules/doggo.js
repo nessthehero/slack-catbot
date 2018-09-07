@@ -1,6 +1,4 @@
-const util = require('util');
 const request = require('request');
-const https = require('https');
 
 module.exports = {
 
@@ -23,16 +21,28 @@ module.exports = {
 					for (let i in puppers.data.children) {
 						if (puppers.data.children.hasOwnProperty(i)) {
 
-							if (!puppers.data.children[i].data.over_18) {
+							if (!puppers.data.children[i].data.over_18) { // No bad things
 
-								if (!puppers.data.children[i].data.is_video) {
+								if (!puppers.data.children[i].data.is_video) { // No straight up videos
 
-									if (typeof puppers.data.children[i].data.preview.images[0].variants.gif !== 'undefined') {
-										p.push(puppers.data.children[i].data.preview.images[0].variants.gif.source.url);
-									} else {
-										if (typeof puppers.data.children[i].data.preview.images[0].source.url !== 'undefined') {
-											p.push(puppers.data.children[i].data.preview.images[0].source.url);
+									if (!puppers.data.children[i].data.stickied) { // Ignore sticky threads (likely announcements)
+
+										let url = puppers.data.children[i].data.url;
+
+										if (url.indexOf('.gifv') > -1) {
+											p.push(url);
+										} else {
+
+											if (typeof puppers.data.children[i].data.preview.images[0].variants.gif !== 'undefined') {
+												p.push(puppers.data.children[i].data.preview.images[0].variants.gif.source.url);
+											} else {
+												if (typeof puppers.data.children[i].data.preview.images[0].source.url !== 'undefined') {
+													p.push(puppers.data.children[i].data.preview.images[0].source.url);
+												}
+											}
+
 										}
+
 									}
 
 								}
@@ -63,31 +73,6 @@ module.exports = {
 				resolve(res);
 
 			});
-
-			// let options = {
-			// 	method: 'HEAD',
-			// 	host: this.bukkit,
-			// 	port: 443,
-			// 	path: '/' + gif
-			// };
-			//
-			// let req = https.get(options, function (r) {
-			//
-			// 	console.log(r.statusCode);
-			//
-			// 	if (r.statusCode === 200) {
-			// 		response.push('https://' + options.host + '/' + gif);
-			// 		resolve(response);
-			// 	} else {
-			// 		reject(response);
-			// 	}
-			//
-			// });
-			//
-			// req.on('error', function (e) {
-			// 	reject(response);
-			// 	console.error('problem with request: ', e);
-			// });
 
 		}.bind(this));
 
