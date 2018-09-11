@@ -27,18 +27,22 @@ module.exports = {
 
 									if (!puppers.data.children[i].data.stickied) { // Ignore sticky threads (likely announcements)
 
-										let url = puppers.data.children[i].data.url;
+										if (typeof puppers.data.children[i].data.preview !== 'undefined') {
 
-										if (url.indexOf('.gifv') > -1) {
-											p.push(url);
-										} else {
+											let url = puppers.data.children[i].data.url;
 
-											if (typeof puppers.data.children[i].data.preview.images[0].variants.gif !== 'undefined') {
-												p.push(puppers.data.children[i].data.preview.images[0].variants.gif.source.url);
+											if (url.indexOf('.gifv') > -1) {
+												p.push(url);
 											} else {
-												if (typeof puppers.data.children[i].data.preview.images[0].source.url !== 'undefined') {
-													p.push(puppers.data.children[i].data.preview.images[0].source.url);
+
+												if (typeof puppers.data.children[i].data.preview.images[0].variants.gif !== 'undefined') {
+													p.push(puppers.data.children[i].data.preview.images[0].variants.gif.source.url);
+												} else {
+													if (typeof puppers.data.children[i].data.preview.images[0].source.url !== 'undefined') {
+														p.push(puppers.data.children[i].data.preview.images[0].source.url);
+													}
 												}
+
 											}
 
 										}
