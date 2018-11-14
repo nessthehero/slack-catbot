@@ -16,6 +16,7 @@ module.exports = {
 
 				puppers = JSON.parse(body);
 				let p = [];
+				let t = [];
 
 				if (typeof puppers.data.children !== 'undefined') {
 					for (let i in puppers.data.children) {
@@ -30,6 +31,9 @@ module.exports = {
 										if (typeof puppers.data.children[i].data.preview !== 'undefined') {
 
 											let url = puppers.data.children[i].data.url;
+											let title = puppers.data.children[i].data.title;
+
+											t.push(title);
 
 											if (url.indexOf('.gifv') > -1) {
 												p.push(url);
@@ -58,10 +62,12 @@ module.exports = {
 				}
 
 				if (p.length > 0) {
-					let rando = p[Math.floor(Math.random() * p.length)];
+					let rnum = Math.floor(Math.random() * p.length)
+					let rando = p[rnum];
+					let rtitle = t[rnum];
 
 					res.push(rando);
-
+					res.push(rtitle);
 				} else {
 					res.push('I couldn\'t find any puppers =(');
 				}
