@@ -65,6 +65,7 @@ bot.on('message', function (data) {
 	if (typeof data.text !== 'undefined') {
 
 		let message = data.text;
+		let whom = data.user;
 		let msg = message.split(' ');
 
 		// Pokemon
@@ -197,13 +198,14 @@ bot.on('message', function (data) {
 
 				let channel = data.channel;
 
-				spotify.get().then(function (res) {
-					// console.log('done');
-					// console.log(res);
+				let msg = message.split(' ');
+				let clean = msg.shift();
+				msg = msg.join(' ');
+
+				spotify.call(msg, whom).then(function (res) {
 					say(res, channel);
 					cooldown();
 				}, function (error) {
-					// console.log('error');
 					say(error, channel);
 					cooldown();
 				});
