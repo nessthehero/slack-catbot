@@ -55,15 +55,9 @@ module.exports = {
 
 			if (args.length > 0) {
 
-				// console.log(args);
-
 				let params = args[0].split(' ');
 
-				// console.log('params', params);
-
 				let method = params.shift();
-
-				// console.log('method', method);
 
 				switch (method) {
 					case '?':
@@ -85,14 +79,9 @@ module.exports = {
 						break;
 					case 'issue':
 
-						// console.log('issue?');
-
 						let repo = this.getAlias(params.shift());
 
 						let title = params.join(' ');
-
-						// console.log(repo);
-						// console.log(title);
 
 						this.auth();
 
@@ -101,9 +90,6 @@ module.exports = {
 							repo: repo,
 							title: title
 						}).then(function (data) {
-
-							// console.log('success');
-							// console.log(data);
 
 							response.push('Repo: ' + repo + '; Created issue: "' + title + '"');
 
