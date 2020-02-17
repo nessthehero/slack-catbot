@@ -33,11 +33,20 @@ module.exports = {
 
 				switch (method) {
 					case '?':
+
+						res.push('Spotify');
+						res.push('*?* - See this message');
+						res.push('*song*/*playing*/_empty_ - The currently playing song (if available)');
+						// res.push('*skip* - Skip the current song (limited to once per person, 5 minute timeout)');
+
+						resolve(res);
+
+						break;
 					case 'playing':
 					case 'song':
 					default:
 
-						let end = this.playingEndpoint;
+						const end = this.playingEndpoint;
 
 						request(end, function (error, response, body) {
 
@@ -62,7 +71,7 @@ module.exports = {
 						break;
 					case 'skip':
 
-						let timecode = new Date().getTime();
+						const timecode = new Date().getTime();
 
 						let spoilsport = _.filter(this.skippers, x => x.user = user);
 
@@ -73,7 +82,7 @@ module.exports = {
 								'time': timecode
 							});
 
-							let end = this.skipEndpoint + '?p=' + this.password;
+							const end = this.skipEndpoint + '?p=' + this.password;
 
 							request(end, function (error, response, body) {
 
@@ -108,7 +117,7 @@ module.exports = {
 
 								this.skippers = _.remove(this.skippers, x => x.user = user);
 
-								let end = this.skipEndpoint + '?p=' + this.password;
+								const end = this.skipEndpoint + '?p=' + this.password;
 
 								request(end, function (error, response, body) {
 
@@ -143,7 +152,7 @@ module.exports = {
 
 			} else {
 
-				let end = this.playingEndpoint;
+				const end = this.playingEndpoint;
 
 				request(end, function (error, response, body) {
 
