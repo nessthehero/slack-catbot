@@ -401,6 +401,8 @@ function say(response, channel) {
 
 	let room = channelOrGroup(channel);
 
+	// const message = response.reverse();
+
 	if (room === 'channel') {
 		sayChannel(response, __channels[channel]);
 	}

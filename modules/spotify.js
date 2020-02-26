@@ -13,6 +13,8 @@ module.exports = {
 
 	skippers: [],
 
+	skipTimeout: false,
+
 	call: function () {
 
 		let args = arguments;
@@ -34,10 +36,10 @@ module.exports = {
 				switch (method) {
 					case '?':
 
-						res.push('Spotify');
-						res.push('*?* - See this message');
-						res.push('*song*/*playing*/_empty_ - The currently playing song (if available)');
-						// res.push('*skip* - Skip the current song (limited to once per person, 5 minute timeout)');
+						res.push('Spotify\n \
+*?* - See this message\n \
+*song*/*playing*/_empty_ - The currently playing song (if available)\n \
+*skip* - Skip the current song (limited to once per person, 5 minute timeout)');
 
 						resolve(res);
 
@@ -71,51 +73,24 @@ module.exports = {
 						break;
 					case 'skip':
 
-						const timecode = new Date().getTime();
+						if (!this.skipTimeout) {
 
-						let spoilsport = _.filter(this.skippers, x => x.user = user);
+							this.skipTimeout = true;
 
-						if (spoilsport.length === 0 || user === config.boss[0]) {
+							setTimeout(function () {
+								this.skipTimeout = false;
+							}.bind(this), 3000);
 
-							this.skippers.push({
-								'user': user,
-								'time': timecode
-							});
+							const timecode = new Date().getTime();
 
-							const end = this.skipEndpoint + '?p=' + this.password;
+							let spoilsport = _.filter(this.skippers, x => x.user = user);
 
-							request(end, function (error, response, body) {
+							if (spoilsport.length === 0) {// || user === config.boss[0]) {
 
-								if (typeof body !== 'undefined') {
-									if (body !== '') {
-										res.push(body);
-									}
-								}
-
-								if (error) {
-									return reject(new Error(error));
-								}
-
-								if (response.statusCode !== 200) {
-									return reject(new Error('bad status code'));
-								}
-
-								resolve(res);
-
-							});
-
-						} else {
-							
-							// Figure out if it expired...
-							
-							let jerk = spoilsport[0];
-							let now = new Date().getTime();
-
-							let diff = now - jerk.time;
-
-							if (diff >= this.timeout) {
-
-								this.skippers = _.remove(this.skippers, x => x.user = user);
+								this.skippers.push({
+									'user': user,
+									'time': timecode
+								});
 
 								const end = this.skipEndpoint + '?p=' + this.password;
 
@@ -141,10 +116,49 @@ module.exports = {
 
 							} else {
 
-								resolve(['cool your jets, man. wait a few minutes and try again.']);
+								// Figure out if it expired...
+
+								let jerk = spoilsport[0];
+								let now = new Date().getTime();
+
+								let diff = now - jerk.time;
+
+								if (diff >= this.timeout) {
+
+									this.skippers = _.remove(this.skippers, x => x.user = user);
+
+									const end = this.skipEndpoint + '?p=' + this.password;
+
+									request(end, function (error, response, body) {
+
+										if (typeof body !== 'undefined') {
+											if (body !== '') {
+												res.push(body);
+											}
+										}
+
+										if (error) {
+											return reject(new Error(error));
+										}
+
+										if (response.statusCode !== 200) {
+											return reject(new Error('bad status code'));
+										}
+
+										resolve(res);
+
+									});
+
+								} else {
+
+									var remaining = (this.timeout - diff) / 1000;
+
+									resolve(['cool your jets, man. wait a few minutes and try again. _remaining: ' + remaining + '_']);
+
+								}
 
 							}
-							
+
 						}
 
 						break;
