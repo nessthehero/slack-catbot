@@ -36,7 +36,7 @@ module.exports = {
 				switch (method) {
 					case '?':
 
-						res.push('Spotify\n \
+						res.push('!spotify *command*\n \
 *?* - See this message\n \
 *song*/*playing*/_empty_ - The currently playing song (if available)\n \
 *skip* - Skip the current song (limited to once per person, 5 minute timeout)');
