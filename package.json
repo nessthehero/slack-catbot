@@ -14,7 +14,7 @@
     "@slack/client": "^4.3.1",
     "cron-parser": "^2.16.3",
     "jsmegahal": "^1.2.4",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "slackbots": "^1.1.0",
     "zomato": "^1.1.0"
   }
