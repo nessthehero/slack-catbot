@@ -4,3 +4,5 @@ node_modules
 .secret
 markov.txt
 catbot-*.txt
+cron.json
+notes.txt

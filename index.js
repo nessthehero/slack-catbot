@@ -10,6 +10,7 @@ const github = require('./modules/github.js');
 // const zomato = require('./modules/zomato.js');
 const doggos = require('./modules/doggo.js');
 const spotify = require('./modules/spotify.js');
+const cron = require('./modules/cron.js');
 
 let cooldownFlag = false;
 let requestInMotionFlag = false;
@@ -27,6 +28,8 @@ let __users = [];
 let markov = __dirname + '/markov.txt';
 
 const hal = new megahal(4);
+
+let cronInterval = null;
 
 bot.on('start', function () {
 
@@ -58,9 +61,37 @@ bot.on('start', function () {
 		hal.addMass(data);
 	});
 
+	cronInterval = setInterval(function () {
+
+		let tasks = cron.init();
+
+		for (let i in tasks) {
+			if (tasks.hasOwnProperty(i)) {
+
+				let task = tasks[i];
+
+				switch (task.task) {
+
+					case 'say':
+
+						say(task.args, task.groups);
+
+						break;
+					default:
+						break;
+
+				}
+
+			}
+		}
+
+	}, 10000);
+
 });
 
 bot.on('message', function (data) {
+
+	console.log(data);
 
 	if (typeof data.text !== 'undefined') {
 
@@ -397,22 +428,44 @@ function validRegex(regex, message) {
 	return message.match(rgx) !== null;
 }
 
+function sayMulti(response, channels) {
+
+	if (channels.length > 0) {
+
+		for (let i in channels) {
+			if (channels.hasOwnProperty(i)) {
+				say(response, channels[i]);
+			}
+		}
+
+	}
+
+}
+
 function say(response, channel) {
 
-	let room = channelOrGroup(channel);
+	if (typeof channel === 'object') {
 
-	// const message = response.reverse();
+		sayMulti(response, channel);
 
-	if (room === 'channel') {
-		sayChannel(response, __channels[channel]);
-	}
+	} else {
 
-	if (room === 'group') {
-		sayGroup(response, __groups[channel]);
-	}
+		let room = channelOrGroup(channel);
 
-	if (room === 'user') {
-		sayUser(response, __users[channel]);
+		// const message = response.reverse();
+
+		if (room === 'channel') {
+			sayChannel(response, __channels[channel]);
+		}
+
+		if (room === 'group') {
+			sayGroup(response, __groups[channel]);
+		}
+
+		if (room === 'user') {
+			sayUser(response, __users[channel]);
+		}
+
 	}
 
 }
