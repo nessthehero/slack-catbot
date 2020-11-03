@@ -11,6 +11,7 @@ const github = require('./modules/github.js');
 const doggos = require('./modules/doggo.js');
 const spotify = require('./modules/spotify.js');
 const cron = require('./modules/cron.js');
+const weather = require('./modules/weather.js');
 
 let cooldownFlag = false;
 let requestInMotionFlag = false;
@@ -75,6 +76,13 @@ bot.on('start', function () {
 					case 'say':
 
 						say(task.args, task.groups);
+
+						break;
+					case 'weather':
+
+						weather.get('40.457161', '-79.976562').then(function (weather) {
+							say(weather, task.groups);
+						});
 
 						break;
 					default:

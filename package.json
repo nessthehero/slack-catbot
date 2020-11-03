@@ -1,20 +1,20 @@
 {
   "name": "slack-catbot",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Slack powered Catbot",
   "main": "index.js",
   "scripts": {
     "start": "index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Ian Moffitt (nessthehero@gmail.com)",
   "license": "MIT",
   "dependencies": {
     "@octokit/rest": "^14.0.0",
     "@slack/client": "^4.3.1",
     "cron-parser": "^2.16.3",
     "jsmegahal": "^1.2.4",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.20",
     "slackbots": "^1.1.0",
     "zomato": "^1.1.0"
   }
