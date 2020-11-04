@@ -99,7 +99,7 @@ bot.on('start', function () {
 
 bot.on('message', function (data) {
 
-	console.log(data);
+	// console.log(data);
 
 	if (typeof data.text !== 'undefined') {
 
@@ -479,27 +479,15 @@ function say(response, channel) {
 }
 
 function sayGroup(response, channel) {
-	for (let i in response) {
-		if (response.hasOwnProperty(i)) {
-			bot.postMessageToGroup(channel, response[i]);
-		}
-	}
+	bot.postMessageToGroup(channel, response.join('\n'));
 }
 
 function sayChannel(response, channel) {
-	for (let i in response) {
-		if (response.hasOwnProperty(i)) {
-			bot.postMessageToChannel(channel, response[i]);
-		}
-	}
+	bot.postMessageToChannel(channel, response.join('\n'));
 }
 
 function sayUser(response, channel) {
-	for (let i in response) {
-		if (response.hasOwnProperty(i)) {
-			bot.postMessageToUser(channel, response[i]);
-		}
-	}
+	bot.postMessageToUser(channel, response.join('\n'));
 }
 
 function canDo() {

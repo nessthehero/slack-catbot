@@ -39,9 +39,9 @@ module.exports = {
 
 				let hours = this.formatHours(weather);
 
-				response.push(hours);
-				response.push(daily);
 				response.push('Good morning!');
+				response.push(daily);
+				response.push(hours);
 
 				resolve(response);
 
