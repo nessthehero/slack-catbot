@@ -62,6 +62,7 @@ bot.on('start', function () {
 		hal.addMass(data);
 	});
 
+	clearInterval(cronInterval);
 	cronInterval = setInterval(function () {
 
 		let tasks = cron.init();
@@ -75,13 +76,18 @@ bot.on('start', function () {
 
 					case 'say':
 
+						warmUp();
 						say(task.args, task.groups);
+						cooldown();
 
 						break;
 					case 'weather':
 
+						warmUp();
+
 						weather.get('40.457161', '-79.976562').then(function (weather) {
 							say(weather, task.groups);
+							cooldown();
 						});
 
 						break;
