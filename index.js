@@ -141,7 +141,11 @@ bot.on('message', function (data) {
 
 		if (meetsCriteria('speak', data)) {
 
+			debug('I am being asked to speak');
+
 			if (canDo()) {
+
+				debug('I can reply');
 
 				warmUp();
 
@@ -535,4 +539,8 @@ function writeToLog(file, text) {
 		if (err) return console.log(err);
 	});
 
+}
+
+function debug(message) {
+	say([message], config.debug);
 }
