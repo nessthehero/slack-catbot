@@ -7,11 +7,40 @@ const megahal = require('jsmegahal');
 const bukkit = require('./modules/bukkit.js');
 const pokemon = require('./modules/pokemon.js');
 const github = require('./modules/github.js');
-// const zomato = require('./modules/zomato.js');
 const doggos = require('./modules/doggo.js');
 const spotify = require('./modules/spotify.js');
-const cron = require('./modules/cron.js');
 const weather = require('./modules/weather.js');
+
+const fork = require('child_process').fork;
+const cronrunner = fork(__dirname + '/cronrunner.js');
+
+cronrunner.on('message', function (task) {
+
+	switch (task.task) {
+
+		case 'say':
+
+			warmUp();
+			say(task.args, task.groups);
+			cooldown();
+
+			break;
+		case 'weather':
+
+			warmUp();
+
+			weather.get('40.457161', '-79.976562').then(function (weather) {
+				say(weather, task.groups);
+				cooldown();
+			});
+
+			break;
+		default:
+			break;
+
+	}
+
+});
 
 let cooldownFlag = false;
 let requestInMotionFlag = false;
@@ -29,8 +58,6 @@ let __users = [];
 let markov = __dirname + '/markov.txt';
 
 const hal = new megahal(4);
-
-let cronInterval = null;
 
 bot.on('start', function () {
 
@@ -61,45 +88,6 @@ bot.on('start', function () {
 	fs.readFile(markov, 'utf8', function (err, data) {
 		hal.addMass(data);
 	});
-
-	clearInterval(cronInterval);
-	cronInterval = setInterval(function () {
-
-		let tasks = cron.init();
-
-		for (let i in tasks) {
-			if (tasks.hasOwnProperty(i)) {
-
-				let task = tasks[i];
-
-				switch (task.task) {
-
-					case 'say':
-
-						warmUp();
-						say(task.args, task.groups);
-						cooldown();
-
-						break;
-					case 'weather':
-
-						warmUp();
-
-						weather.get('40.457161', '-79.976562').then(function (weather) {
-							say(weather, task.groups);
-							cooldown();
-						});
-
-						break;
-					default:
-						break;
-
-				}
-
-			}
-		}
-
-	}, 10000);
 
 });
 
@@ -141,11 +129,11 @@ bot.on('message', function (data) {
 
 		if (meetsCriteria('speak', data)) {
 
-			debug('I am being asked to speak');
+			// debug('I am being asked to speak');
 
 			if (canDo()) {
 
-				debug('I can reply');
+				// debug('I can reply');
 
 				warmUp();
 
@@ -262,32 +250,6 @@ bot.on('message', function (data) {
 			}
 
 		}
-
-		// if (meetsCriteria('zomato', data)) {
-		//
-		// 	if (canDo()) {
-		//
-		// 		warmUp();
-		//
-		// 		// let channel = data.channel;
-		//
-		// 		let msg = message.split(' ');
-		// 		let clean = msg.shift();
-		// 		msg = msg.join(' ');
-		//
-		// 		zomato.retrieve(msg).then(function (data) {
-		// 			console.log('done');
-		// 			// say(data, channel);
-		// 			cooldown();
-		// 		}, function (error) {
-		// 			console.log('error');
-		// 			// say(error, channel);
-		// 			cooldown();
-		// 		});
-		//
-		// 	}
-		//
-		// }
 
 		if (meetsCriteria('bukkit', data)) {
 
