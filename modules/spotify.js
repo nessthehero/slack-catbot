@@ -5,8 +5,8 @@ const _ = require('lodash');
 
 module.exports = {
 
-	playingEndpoint: 'https://spotify.ianmoffitt.dev/now.php',
-	skipEndpoint: 'https://spotify.ianmoffitt.dev/skip.php',
+	playingEndpoint: config.config.spotify.playing,
+	skipEndpoint: config.config.spotify.skip,
 
 	password: config.config.spotify.password,
 	timeout: config.config.spotify.timeout,
@@ -151,7 +151,7 @@ module.exports = {
 
 								} else {
 
-									var remaining = (this.timeout - diff) / 1000;
+									var remaining = Math.ceil((this.timeout - diff) / 1000);
 
 									resolve(['cool your jets, man. wait a few minutes and try again. _remaining: ' + remaining + '_']);
 
