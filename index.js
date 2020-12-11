@@ -89,6 +89,8 @@ bot.on('start', function () {
 		hal.addMass(data);
 	});
 
+	debug('goob morning');
+
 });
 
 bot.on('message', function (data) {
