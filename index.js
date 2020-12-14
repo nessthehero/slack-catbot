@@ -29,7 +29,7 @@ cronrunner.on('message', function (task) {
 
 			warmUp();
 
-			weather.get('40.457161', '-79.976562').then(function (weather) {
+			weather.get(config.config.weather.lat, config.config.weather.lon).then(function (weather) {
 				say(weather, task.groups);
 				cooldown();
 			});
@@ -89,7 +89,7 @@ bot.on('start', function () {
 		hal.addMass(data);
 	});
 
-	debug('goob morning');
+	debug('ping? pong!');
 
 });
 
@@ -131,11 +131,7 @@ bot.on('message', function (data) {
 
 		if (meetsCriteria('speak', data)) {
 
-			// debug('I am being asked to speak');
-
 			if (canDo()) {
-
-				// debug('I can reply');
 
 				warmUp();
 
@@ -215,12 +211,9 @@ bot.on('message', function (data) {
 				let channel = data.channel;
 
 				doggos.get().then(function (res) {
-					// console.log('done');
-					// console.log(res);
 					say(res, channel);
 					cooldown();
 				}, function (error) {
-					// console.log('error');
 					say(error, channel);
 					cooldown();
 				});
