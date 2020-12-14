@@ -499,5 +499,7 @@ function writeToLog(file, text) {
 }
 
 function debug(message) {
-	say([message], config.debug);
+	if (config.debug.length > 0) {
+		say([message], config.debug);
+	}
 }
