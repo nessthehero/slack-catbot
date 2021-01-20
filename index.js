@@ -11,6 +11,8 @@ const doggos = require('./modules/doggo.js');
 const spotify = require('./modules/spotify.js');
 const weather = require('./modules/weather.js');
 
+const Accessor = require('Accessor');
+
 const fork = require('child_process').fork;
 const cronrunner = fork(__dirname + '/cronrunner.js');
 
@@ -102,6 +104,12 @@ bot.on('message', function (data) {
 		let message = data.text;
 		let whom = data.user;
 		let msg = message.split(' ');
+
+		if (meetsCriteria('data', data)) {
+
+
+
+		}
 
 		// Pokemon
 		if (meetsCriteria('pokemon', data)) {
