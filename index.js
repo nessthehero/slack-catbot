@@ -37,6 +37,14 @@ cronrunner.on('message', function (task) {
 			});
 
 			break;
+		case 'alerts':
+
+			weather.getAlerts(config.config.weather.lat, config.config.weather.lon, false).then(function (alerts) {
+				say(alerts, task.groups);
+				cooldown();
+			});
+
+			break;
 		default:
 			break;
 
@@ -91,6 +99,10 @@ bot.on('start', function () {
 		hal.addMass(data);
 	});
 
+	weather.prefillAlerts(config.config.weather.lat, config.config.weather.lon).then(function (weather) {
+		cooldown();
+	});
+
 	debug('ping? pong!');
 
 });
@@ -107,7 +119,25 @@ bot.on('message', function (data) {
 
 		if (meetsCriteria('data', data)) {
 
+		}
 
+		if (meetsCriteria('weather', data)) {
+
+			if (canDo()) {
+
+				warmUp();
+
+				let channel = data.channel;
+
+				weather.getAlerts(config.config.weather.lat, config.config.weather.lon, true).then(function (weather) {
+					say(weather, channel);
+					cooldown();
+				}, function (error) {
+					say(error, channel);
+					cooldown();
+				});
+
+			}
 
 		}
 
@@ -151,7 +181,7 @@ bot.on('message', function (data) {
 
 					let response = [
 						'I am catbot! You can talk to me and I might reply. I like hearing my name.',
-						'Other commands: `pokemon`, `gh`, `bukkit`, `!doggo`'
+						'Other commands: `pokemon`, `gh`, `bukkit`, `!doggo`, `!weather`'
 					];
 
 					say(response, channel);
@@ -391,13 +421,12 @@ function meetsCriteria(tool, data) {
 			validRoom = true;
 		}
 
-	}
+		if (typeof toolConfig['regex'] !== 'undefined') {
+			let regex = new RegExp(toolConfig['regex'], 'i');
 
-	if (typeof toolConfig['regex'] !== 'undefined') {
-		let regex = new RegExp(toolConfig['regex'], 'i');
-
-		if (message.match(regex) !== null) {
-			validMatch = true;
+			if (message.match(regex) !== null) {
+				validMatch = true;
+			}
 		}
 	}
 

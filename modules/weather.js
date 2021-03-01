@@ -1,6 +1,7 @@
 const util = require('util');
 const request = require('request');
 const config = require('../bot.json');
+const breiutil = require('brei-util');
 
 module.exports = {
 
@@ -27,6 +28,9 @@ module.exports = {
 		"50n": ":fog:",
 	},
 
+	alerts: [],
+	sentAlerts: [],
+
 	get: function (lat, lon) {
 
 		return new Promise(function (resolve, reject) {
@@ -43,6 +47,10 @@ module.exports = {
 				response.push(daily);
 				response.push(hours);
 
+				if (this.alerts.length > 0) {
+					response.push('*' + this.alerts.length + '* Active Weather Alert(s). *!weather* to see.');
+				}
+
 				resolve(response);
 
 			}.bind(this), function (error) {
@@ -57,7 +65,99 @@ module.exports = {
 
 	},
 
+	getAlerts: function (lat, lon, allAlerts) {
+
+		if (typeof allAlerts === 'undefined' || allAlerts === null) {
+			allAlerts = false;
+		}
+
+		return new Promise(function (resolve, reject) {
+
+			let response = [];
+
+			this.apiGet(lat, lon).then(function (weather) {
+
+				if (allAlerts) {
+					let daily = this.formatDay(weather);
+
+					let hours = this.formatHours(weather);
+
+					response.push(daily);
+					response.push(hours);
+				}
+
+				let alerts = this.alerts.filter(x => {
+					let currDate = new Date();
+					let alertDate = new Date(x.start * 1000);
+
+					let diff = (currDate.getTime() - alertDate.getTime()) / 1000 / 60; // Minutes
+
+					let recent = (diff > 10);
+
+					const key = breiutil.slugify(x['start'] + '-' + x['end'] + '-' + x['event']);
+
+					let spentAlert = this.sentAlerts.filter(y => y === key);
+
+					return (recent && spentAlert.length === 0) || allAlerts; // More than 10 minute difference
+				});
+
+				if (alerts.length > 0) {
+
+					for (var i in alerts) {
+						if (alerts.hasOwnProperty(i)) {
+							response.push('*' + alerts[i]['sender_name'] + '*: ' + alerts[i]['description']);
+						}
+					}
+
+					this.sentAlerts = [];
+
+					for (var j in this.alerts) {
+						if (this.alerts.hasOwnProperty(j)) {
+							this.sentAlerts.push(breiutil.slugify(this.alerts[j]['start'] + '-' + this.alerts[j]['end'] + '-' + this.alerts[j]['event']))
+						}
+					}
+
+				}
+
+				resolve(response);
+
+			}.bind(this), function (error) {
+
+				response.push(error);
+
+				return reject(response);
+
+			}.bind(this));
+
+		}.bind(this));
+
+	},
+
+	prefillAlerts: function (lat, lon) {
+
+		return new Promise(function (resolve, reject) {
+
+			let response = false;
+
+			this.apiGet(lat, lon).then(function (weather) {
+
+				response = true;
+
+				resolve(response);
+
+			}.bind(this), function (error) {
+
+				return reject(response);
+
+			}.bind(this));
+
+		}.bind(this));
+
+	},
+
 	apiGet: function (lat, lon) {
+
+		let _this = this;
 
 		let apikey = config.config.weather.apikey;
 		let endp = this.endpoint;
@@ -71,8 +171,6 @@ module.exports = {
 
 			 	request(endp, function (error, response, body) {
 
-			 		// console.log(response);
-
 					if (error) {
 						return reject(new Error(error));
 					}
@@ -82,6 +180,18 @@ module.exports = {
 					}
 
 					weather = JSON.parse(body);
+
+					if (typeof weather.alerts !== 'undefined') {
+						_this.alerts = weather.alerts;
+
+						_this.sentAlerts = [];
+
+						for (var j in _this.alerts) {
+							if (_this.alerts.hasOwnProperty(j)) {
+								_this.sentAlerts.push(breiutil.slugify(_this.alerts[j]['start'] + '-' + _this.alerts[j]['end'] + '-' + _this.alerts[j]['event']))
+							}
+						}
+					}
 
 					resolve(weather);
 
