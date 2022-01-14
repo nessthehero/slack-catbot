@@ -109,8 +109,6 @@ bot.on('start', function () {
 
 bot.on('message', function (data) {
 
-	// console.log(data);
-
 	if (typeof data.text !== 'undefined') {
 
 		let message = data.text;
@@ -159,7 +157,7 @@ bot.on('message', function (data) {
 				}.bind(this), function (error) {
 					let rr = [':shrug: [whoopsie: ' + error + ']'];
 					say(rr, data.channel);
-					console.log(error);
+					console.error(error);
 
 					cooldown();
 				}.bind(this));

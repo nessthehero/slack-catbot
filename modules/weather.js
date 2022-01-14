@@ -75,7 +75,7 @@ module.exports = {
 
 			let response = [];
 
-			this.apiGet(lat, lon).then(function (weather) {
+			this.apiGet(lat, lon, false).then(function (weather) {
 
 				if (allAlerts) {
 					let daily = this.formatDay(weather);
@@ -139,7 +139,7 @@ module.exports = {
 
 			let response = false;
 
-			this.apiGet(lat, lon).then(function (weather) {
+			this.apiGet(lat, lon, true).then(function (weather) {
 
 				response = true;
 
@@ -155,7 +155,11 @@ module.exports = {
 
 	},
 
-	apiGet: function (lat, lon) {
+	apiGet: function (lat, lon, fillAlerts) {
+
+		if (typeof fillAlerts === 'undefined' || fillAlerts === null) {
+			fillAlerts = false;
+		}
 
 		let _this = this;
 
@@ -184,11 +188,13 @@ module.exports = {
 					if (typeof weather.alerts !== 'undefined') {
 						_this.alerts = weather.alerts;
 
-						_this.sentAlerts = [];
+						if (fillAlerts) {
+							_this.sentAlerts = [];
 
-						for (var j in _this.alerts) {
-							if (_this.alerts.hasOwnProperty(j)) {
-								_this.sentAlerts.push(breiutil.slugify(_this.alerts[j]['start'] + '-' + _this.alerts[j]['end'] + '-' + _this.alerts[j]['event']))
+							for (var j in _this.alerts) {
+								if (_this.alerts.hasOwnProperty(j)) {
+									_this.sentAlerts.push(breiutil.slugify(_this.alerts[j]['start'] + '-' + _this.alerts[j]['end'] + '-' + _this.alerts[j]['event']))
+								}
 							}
 						}
 					}
