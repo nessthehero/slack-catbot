@@ -92,20 +92,36 @@ module.exports = {
 
 					let diff = (currDate.getTime() - alertDate.getTime()) / 1000 / 60; // Minutes
 
-					let recent = (diff > 10);
+					let recent = (diff > 5);
 
 					const key = breiutil.slugify(x['start'] + '-' + x['end'] + '-' + x['event']);
 
 					let spentAlert = this.sentAlerts.filter(y => y === key);
 
-					return (recent && spentAlert.length === 0) || allAlerts; // More than 10 minute difference
+					return (recent && spentAlert.length === 0) || allAlerts; // More than 5 minute difference
 				});
 
 				if (alerts.length > 0) {
 
+					// The API seems to mush all the alerts together anyway, but we'll loop through this anyway
+					// just in case it ever returns more than one.
 					for (var i in alerts) {
+
+						let aStart = 0;
+						let aEnd = 0;
+
 						if (alerts.hasOwnProperty(i)) {
+							if (i > 0) {
+								response.push('-----');
+							}
+
 							response.push('*' + alerts[i]['sender_name'] + '*: ' + alerts[i]['description']);
+
+							aStart = new Date(parseInt(alerts[i]['start'], 10) * 1000);
+							aEnd = new Date(parseInt(alerts[i]['end'], 10) * 1000);
+
+							response.push('*In Effect:* ' + aStart.toString());
+							response.push('*Expires:* ' + aEnd.toString());
 						}
 					}
 
