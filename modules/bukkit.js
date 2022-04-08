@@ -1,10 +1,11 @@
 const util = require('util');
 const request = require('request');
 const https = require('https');
+const config = require('../bot.json');
 
 module.exports = {
 
-	bukkit: 'bukkit.ianmoffitt.co',
+	bukkit: config.config.bukkit.bukkit,
 
 	get: function (gif) {
 

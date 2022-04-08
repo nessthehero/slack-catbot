@@ -8,10 +8,8 @@ const bukkit = require('./modules/bukkit.js');
 const pokemon = require('./modules/pokemon.js');
 const github = require('./modules/github.js');
 const doggos = require('./modules/doggo.js');
-const spotify = require('./modules/spotify.js');
+// const spotify = require('./modules/spotify.js');
 const weather = require('./modules/weather.js');
-
-const Accessor = require('Accessor');
 
 const fork = require('child_process').fork;
 const cronrunner = fork(__dirname + '/cronrunner.js');
@@ -65,12 +63,14 @@ let __channels = [];
 let __groups = [];
 let __users = [];
 
+// The Brain where he gets his words from. You may need to create this file. Catbot does not add to this file.
 let markov = __dirname + '/markov.txt';
 
 const hal = new megahal(4);
 
 bot.on('start', function () {
 
+	// Public channels
 	let _channels = bot.getChannels();
 	let channels = _channels._value.channels;
 	for (let i in channels) {
@@ -79,6 +79,7 @@ bot.on('start', function () {
 		}
 	}
 
+	// Private channels
 	let _groups = bot.getGroups();
 	let groups = _groups._value.groups;
 	for (let i in groups) {
@@ -87,6 +88,7 @@ bot.on('start', function () {
 		}
 	}
 
+	// Users
 	let _users = bot.getUsers();
 	let users = _users._value.users;
 	for (let i in users) {
@@ -95,6 +97,7 @@ bot.on('start', function () {
 		}
 	}
 
+	// Load the brain into MegaHAL
 	fs.readFile(markov, 'utf8', function (err, data) {
 		hal.addMass(data);
 	});
@@ -114,10 +117,6 @@ bot.on('message', function (data) {
 		let message = data.text;
 		let whom = data.user;
 		let msg = message.split(' ');
-
-		if (meetsCriteria('data', data)) {
-
-		}
 
 		if (meetsCriteria('weather', data)) {
 
@@ -258,29 +257,29 @@ bot.on('message', function (data) {
 
 		}
 
-		if (meetsCriteria('spotify', data)) {
-
-			if (canDo()) {
-
-				warmUp();
-
-				let channel = data.channel;
-
-				let msg = message.split(' ');
-				let clean = msg.shift();
-				msg = msg.join(' ');
-
-				spotify.call(msg, whom).then(function (res) {
-					say(res, channel);
-					cooldown();
-				}, function (error) {
-					say(error, channel);
-					cooldown();
-				});
-
-			}
-
-		}
+		// if (meetsCriteria('spotify', data)) {
+		//
+		// 	if (canDo()) {
+		//
+		// 		warmUp();
+		//
+		// 		let channel = data.channel;
+		//
+		// 		let msg = message.split(' ');
+		// 		let clean = msg.shift();
+		// 		msg = msg.join(' ');
+		//
+		// 		spotify.call(msg, whom).then(function (res) {
+		// 			say(res, channel);
+		// 			cooldown();
+		// 		}, function (error) {
+		// 			say(error, channel);
+		// 			cooldown();
+		// 		});
+		//
+		// 	}
+		//
+		// }
 
 		if (meetsCriteria('bukkit', data)) {
 
@@ -302,7 +301,7 @@ bot.on('message', function (data) {
 				if (gif === 'help' || gif === '?') {
 
 					let response = [
-						'Output a gif from Ians Bukkit site. https://bukkit.ianmoffitt.co',
+						'Output a gif from a Bukkit site. (' + config.config.bukkit.bukkit + ')',
 						'Format: `!name.gif` or `bukkit name.gif`'
 					];
 

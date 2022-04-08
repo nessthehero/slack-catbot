@@ -42,7 +42,7 @@ module.exports = {
 	],
 
 	endpoint: 'http://pokeapi.co/api/v2/pokemon/%s',
-	maximum: 802,
+	maximum: 898,
 
 	retrieve: function (msg) {
 

@@ -6,25 +6,43 @@
 	"boss": [
 		"{USER ID NOT NAME}"
 	],
+	"debug": [
+		"{ROOM ID TO LOG DEBUGGING}"
+	],
 	"config": {
 		"generator": {
 		},
 		"pokemon": {
-			"regex": "^pokemon.+"
-		},
-		"reset": {
-			"regex": "!die|!goaway|!reset"
+			"regex": "^pokemon.+",
+			"groups": []
 		},
 		"speak": {
 			"regex": "catbot"
 		},
 		"bukkit": {
+			"bukkit": "{URL OF BUKKIT SERVER}",
 			"regex": "^bukkit.+|^!(.+).gif$|^!(.+).jpeg$|^!(.+).jpg$|^!(.+).png$"
 		},
 		"github": {
 			"username": "{GITHUB USERNAME}",
 			"password": "{GITHUB PASSWORD}",
 			"regex": "^gh .+"
+		},
+		"doggo": {
+			"regex": "!doggo|!pupper|!woofer|!doge|!shoob|!wrinkler|!puggo|!floofer|!goodboye"
+		},
+		"spotify": {
+			"regex": "^!spotify|^!song",
+			"password": "{SPOTIFY API KEY}",
+			"skip": "skip-endpoint.php",
+			"playing": "now-playing-endpoint.php",
+			"timeout": 300000
+		},
+		"weather": {
+			"regex": "!weather",
+			"apikey": "{OPENWEATHER API KEY}",
+			"lat": "34.478263",
+			"lon": "-114.362723"
 		}
 	}
 }
